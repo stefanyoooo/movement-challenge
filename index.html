@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>運動挑戰排行榜 · Movement Challenge Leaderboard</title>
+<script>
+/* =====================================================================
+   ✏️  DATA — EDIT ONLY THIS SECTION TO UPDATE SCORES / WEEKS / GOALS
+   ---------------------------------------------------------------------
+   • Numbers are shown exactly as typed (strings), never recalculated.
+   • Keep rows in rank order. Text fields with {zh, en} are bilingual.
+   ===================================================================== */
+const DATA = {
+  currentWeek: {
+    number: 2,
+    dates: { zh: "10月19–25日", en: "Oct 19–25" },
+    status: { zh: "進行中", en: "in progress" },
+    rows: [
+      { rank: 1, name: "Dodo",  minutes: "189.4", progress: "100%",  exercise: "80.0", goals: "10.0", total: "90.0" },
+      { rank: 2, name: "Clem",  minutes: "104.0", progress: "86.7%", exercise: "76.1", goals: "10.0", total: "86.1" },
+      { rank: 3, name: "Vicky", minutes: "92.7",  progress: "77.2%", exercise: "69.4", goals: "10.0", total: "79.4" }
+    ]
+  },
+  previousWeeks: [
+    {
+      number: 1,
+      dates: { zh: "10月12–18日, 2026", en: "Oct 12–18, 2026" },
+      rows: [
+        { name: "Vicky", minutes: "30.0", progress: "25.0%", exercise: "12.5", goals: "10.0", total: "22.5" }
+      ]
+    }
+  ],
+  personalGoals: [
+    { name: "Clem",  achievable: null, stretch: null },   // null = 待定 / TBC
+    { name: "Dodo",  achievable: null, stretch: null },
+    { name: "Vicky", achievable: null, stretch: null }
+  ],
+  timeline: [
+    { week: "W1", dates: { zh: "10月12–18日", en: "Oct 12–18" }, trial: true },
+    { week: "W2", dates: { zh: "10月19–25日", en: "Oct 19–25" }, trial: true },
+    { week: "W3", dates: null }, { week: "W4", dates: null }, { week: "W5", dates: null },
+    { week: "W6", dates: null }, { week: "W7", dates: null }, { week: "W8", dates: null },
+    { week: "W9", dates: null }, { week: "W10", dates: null }, { week: "W11", dates: null },
+    { week: "W12", dates: null }      // null = 日期待定 / Dates TBC
+  ]
+};
+/* ======================== END OF DATA SECTION ======================== */
+</script>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#fff; --ink:#1d2433; --muted:#667085; --line:#e6e8ef;
+    --brand:#2f6df6; --brand-soft:#e8efff; --green:#12a150; --gold:#f5b301; --gold-soft:#fff6d6;
+    --silver:#a7b0be; --bronze:#d08a4c; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang HK","Noto Sans TC","Microsoft JhengHei",Roboto,sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.55;-webkit-text-size-adjust:100%;overflow-wrap:anywhere}
+  .wrap{max-width:760px;margin:0 auto;padding:16px 14px 48px}
+  header{position:relative;padding:8px 0 4px}
+  .lang{position:absolute;top:6px;right:0;display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
+  .lang button{border:0;background:transparent;font:inherit;font-size:13px;padding:5px 11px;border-radius:999px;color:var(--muted);cursor:pointer}
+  .lang button.on{background:var(--brand);color:#fff}
+  h1{font-size:26px;margin:38px 0 8px;letter-spacing:.5px}
+  h1 .emoji{margin-right:4px}
+  .pill{display:inline-block;background:#e7f7ee;color:var(--green);font-weight:600;font-size:13px;padding:4px 12px;border-radius:999px}
+  .note{color:var(--muted);font-size:13px;margin:8px 0 0}
+  section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-top:16px}
+  h2{font-size:18px;margin:0 0 12px}
+  h3{font-size:15px;margin:0 0 8px}
+  ul,ol{margin:0;padding-left:20px}
+  li{margin:4px 0}
+  .muted{color:var(--muted)}
+  /* leaderboard cards (mobile) */
+  .cards{display:grid;gap:10px}
+  .pcard{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center}
+  .rank{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;background:var(--brand)}
+  .r1 .rank{background:var(--gold)} .r2 .rank{background:var(--silver)} .r3 .rank{background:var(--bronze)}
+  .pname{font-weight:700;font-size:17px}
+  .ptotal{text-align:right}
+  .ptotal b{font-size:24px;display:block;line-height:1.1}
+  .ptotal small{color:var(--muted);font-size:11px}
+  .bar{grid-column:1/-1;height:8px;background:var(--brand-soft);border-radius:99px;overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%;background:var(--brand);border-radius:99px}
+  .stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+  .stat{background:var(--bg);border-radius:10px;padding:6px 4px;text-align:center}
+  .stat span{display:block;font-size:10.5px;color:var(--muted);line-height:1.25}
+  .stat b{font-size:14px}
+  /* table (wider screens) */
+  table{width:100%;border-collapse:collapse;display:none;font-size:14px}
+  th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:center}
+  th{font-size:12px;color:var(--muted);font-weight:600}
+  td.n{text-align:left;font-weight:700}
+  td.t{font-weight:700;font-size:16px}
+  @media (min-width:640px){ table.lb{display:table} .cards.lb{display:none} }
+  .prev{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}
+  .prev .row{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+  .ref{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0 10px;padding:0;list-style:none}
+  .ref li{margin:0;background:var(--brand-soft);border-radius:10px;padding:8px;text-align:center;font-size:13px}
+  .ref li b{display:block;font-size:16px;color:var(--brand)}
+  .sample{background:var(--gold-soft);border:2px solid var(--gold)}
+  .tag{display:inline-block;background:var(--gold);color:#3b2b00;font-weight:700;font-size:12px;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+  .chat{display:flex;flex-direction:column;gap:10px}
+  .bubble{max-width:88%;padding:10px 14px;border-radius:18px;font-size:14.5px}
+  .bubble.in{align-self:flex-start;background:#eef0f5;border-bottom-left-radius:6px}
+  .bubble.out{align-self:flex-end;background:#d9fdd3;border-bottom-right-radius:6px}
+  .bubble.no{align-self:flex-start;background:#fff1f0;border-bottom-left-radius:6px}
+  .goals{display:grid;gap:10px}
+  @media (min-width:640px){ .goals{grid-template-columns:repeat(3,1fr)} }
+  .gcard{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .slot{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding:4px 0;border-top:1px dashed var(--line)}
+  .tbc{color:var(--muted);font-style:italic}
+  .tl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;list-style:none;padding:0}
+  @media (min-width:640px){ .tl{grid-template-columns:repeat(4,1fr)} }
+  .tl li{margin:0;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
+  .tl li b{display:block}
+  .tl li.cur{border-color:var(--brand);background:var(--brand-soft)}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="btn-zh" class="on" onclick="setLang('zh')">繁中</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <h1><span class="emoji">🏃</span><span data-i="title"></span></h1>
+    <span class="pill" data-i="pill"></span>
+    <p class="note" data-i="note"></p>
+  </header>
+
+  <section id="leaderboard">
+    <h2 id="lb-head"></h2>
+    <div class="cards lb" id="lb-cards"></div>
+    <table class="lb" id="lb-table"></table>
+  </section>
+
+  <section id="previous">
+    <h2 data-i="prevTitle"></h2>
+    <div id="prev-list"></div>
+  </section>
+
+  <section id="scoring">
+    <h2 data-i="scoreTitle"></h2>
+    <ul>
+      <li data-i="score1"></li>
+      <li><span data-i="refIntro"></span>
+        <ul class="ref" id="ref-list"></ul>
+      </li>
+      <li data-i="score3"></li>
+      <li data-i="score4"></li>
+    </ul>
+  </section>
+
+  <section class="sample" id="example">
+    <span class="tag" data-i="sampleTag"></span>
+    <h2 data-i="sampleTitle"></h2>
+    <p style="margin:0 0 8px" data-i="sampleBody"></p>
+    <p class="muted" style="margin:0;font-size:13px" data-i="sampleNote"></p>
+  </section>
+
+  <section id="rules">
+    <h2 data-i="rulesTitle"></h2>
+    <ol id="rules-list"></ol>
+  </section>
+
+  <section id="submit">
+    <h2 data-i="submitTitle"></h2>
+    <div class="chat">
+      <div class="bubble out" data-i="sub1"></div>
+      <div class="bubble out" data-i="sub2"></div>
+      <div class="bubble no" data-i="sub3"></div>
+    </div>
+  </section>
+
+  <section id="goals">
+    <h2 data-i="goalsTitle"></h2>
+    <div class="goals" id="goals-list"></div>
+  </section>
+
+  <section id="timeline">
+    <h2 data-i="tlTitle"></h2>
+    <ul class="tl" id="tl-list"></ul>
+  </section>
+
+  <footer data-i="footer"></footer>
+</div>
+
+<script>
+const T = {
+  zh: {
+    title: "運動挑戰排行榜",
+    pill: "試行期 · 已入帳",
+    note: "正式開始日期待定 · 暫按曆週（星期一至日）計分",
+    lbHead: (w) => `本週排行榜 · 第 ${w.number} 週（${w.dates.zh} · ${w.status.zh}）`,
+    cols: ["名次", "參加者", "本週分鐘", "進度", "運動分 /80", "目標分 /20", "總分"],
+    short: ["分鐘", "進度", "運動 /80", "目標 /20"],
+    totalLbl: "總分",
+    prevTitle: "歷週成績",
+    prevWeek: (w) => `第 ${w.number} 週（${w.dates.zh}）`,
+    prevRow: (r) => `${r.minutes} 分鐘 · ${r.progress} · 運動 ${r.exercise} ＋ 目標 ${r.goals} ＝ <b>${r.total}</b>`,
+    scoreTitle: "點計分",
+    score1: "每人每星期目標係 120 分鐘運動。做夠 120 分鐘，運動分攞滿 80 分；做得越接近 120 分鐘，分數跳得越快。",
+    refIntro: "幾個參考位：",
+    refs: [["36 分鐘（30%）","約 17 分"],["60 分鐘（50%）","40 分"],["84 分鐘（70%）","約 63 分"],["120 分鐘（100%）","80 分"]],
+    score3: "個人目標分最高 20 分：可達成目標 10 分 ＋ 延伸目標 10 分，每星期每項最多計一次。",
+    score4: "每星期總分上限 100 分，分數顯示至小數後一位。",
+    sampleTag: "範例 · Sample",
+    sampleTitle: "計分例子",
+    sampleBody: "踩單車 42 分鐘 = 完成 35% → 按完成比例換算，運動分 22.5；再加個人目標達成 10 分 = 總分 32.5 / 100",
+    sampleNote: "呢個只係示範，唔係真參加者，唔會出現喺排行榜。",
+    rulesTitle: "規則",
+    rules: [
+      "每人每星期做夠 120 分鐘運動，一星期內點分配完全自由（例如跑 30 分鐘 + 行 90 分鐘，都計足）。",
+      "任何有 workout 記錄嘅運動都計：跑步、行路、踩單車、游水、HIIT、舉鐵、打波、瑜伽等，一律按記錄時長計。",
+      "唔睇心率、唔分 Zone、唔設單次最少分鐘、唔設運動種類門檻。",
+      "超過 120 分鐘唔會再加分（運動分封頂 80 分）。",
+      "個人目標分：可達成 10 分 + 延伸 10 分，只可以喺報告話達成咗先計，每星期每項最多一次。",
+      "頭兩個星期係試行期 (trial)。"
+    ],
+    submitTitle: "交報告要交啲乜",
+    sub1: "📸 一張 workout summary 截圖，見到「日期 + 時長」就得；或者打一行字：名 + 邊日 + 做咗乜 + 幾多分鐘。",
+    sub2: "🎯 如果達成咗個人目標，講多一句就得。",
+    sub3: "🙅 唔使交：心率 Zone 圖、體重、GPS 路線、完整心率圖 — 全部唔使。",
+    goalsTitle: "個人目標",
+    achievable: "可達成目標", stretch: "延伸目標", tbc: "待定",
+    tlTitle: "時間表（W1–W12）",
+    trial: "試行", datesTbc: "日期待定",
+    footer: "朋友之間嘅運動小遊戲 · 唔係醫療或體能評估 💪"
+  },
+  en: {
+    title: "Movement Challenge Leaderboard",
+    pill: "Trial · entries recorded",
+    note: "Formal start date to be confirmed · scored by calendar weeks (Mon–Sun) for now",
+    lbHead: (w) => `Leaderboard · Week ${w.number} (${w.dates.en} · ${w.status.en})`,
+    cols: ["Rank", "Name", "Minutes", "Progress", "Exercise /80", "Goals /20", "Total"],
+    short: ["Minutes", "Progress", "Exercise /80", "Goals /20"],
+    totalLbl: "Total",
+    prevTitle: "Previous weeks",
+    prevWeek: (w) => `Week ${w.number} (${w.dates.en})`,
+    prevRow: (r) => `${r.minutes} min · ${r.progress} · Exercise ${r.exercise} + Goals ${r.goals} = <b>${r.total}</b>`,
+    scoreTitle: "How scoring works",
+    score1: "Everyone's weekly target is 120 minutes of exercise. Hit 120 minutes and you get the full 80 exercise points; the closer you get to 120 minutes, the faster your points climb.",
+    refIntro: "A few reference points:",
+    refs: [["36 min (30%)","about 17 pts"],["60 min (50%)","40 pts"],["84 min (70%)","about 63 pts"],["120 min (100%)","80 pts"]],
+    score3: "Personal goal points, up to 20: 10 for your achievable goal + 10 for your stretch goal, each counted at most once per week.",
+    score4: "Weekly total is capped at 100 points; scores are shown to one decimal place.",
+    sampleTag: "範例 · Sample",
+    sampleTitle: "Scoring example",
+    sampleBody: "Cycling for 42 minutes = 35% done → converted by how much you completed, that's 22.5 exercise points; add 10 points for hitting a personal goal = 32.5 / 100 total",
+    sampleNote: "This is just a demonstration, not a real participant — it won't appear on the leaderboard.",
+    rulesTitle: "Rules",
+    rules: [
+      "Everyone aims for 120 minutes of exercise per week, split however you like (e.g. a 30-minute run + a 90-minute walk counts in full).",
+      "Any exercise with a workout record counts: running, walking, cycling, swimming, HIIT, weights, ball games, yoga and more — all counted by recorded duration.",
+      "No heart-rate checks, no zones, no minimum session length, no restrictions on type of exercise.",
+      "Nothing extra beyond 120 minutes (exercise points cap at 80).",
+      "Personal goal points: 10 achievable + 10 stretch, only counted when your report says you've hit it, each at most once per week.",
+      "The first two weeks are a trial period."
+    ],
+    submitTitle: "What to send in",
+    sub1: "📸 A screenshot of your workout summary — as long as it shows the date + duration; or just type one line: name + which day + what you did + how many minutes.",
+    sub2: "🎯 If you hit a personal goal, just mention it.",
+    sub3: "🙅 No need to send: heart-rate zone charts, weight, GPS routes or full heart-rate graphs — none of it.",
+    goalsTitle: "Personal goals",
+    achievable: "Achievable goal", stretch: "Stretch goal", tbc: "TBC",
+    tlTitle: "Timeline (W1–W12)",
+    trial: "trial", datesTbc: "Dates TBC",
+    footer: "A friendly game between friends · not a medical or fitness assessment 💪"
+  }
+};
+
+let LANG = "zh";
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function render(){
+  const t = T[LANG], w = DATA.currentWeek;
+  document.documentElement.lang = LANG === "zh" ? "zh-Hant" : "en";
+  document.title = LANG === "zh" ? "運動挑戰排行榜 · Movement Challenge Leaderboard" : "Movement Challenge Leaderboard";
+  document.querySelectorAll("[data-i]").forEach(el => { el.textContent = t[el.dataset.i]; });
+  document.getElementById("btn-zh").classList.toggle("on", LANG === "zh");
+  document.getElementById("btn-en").classList.toggle("on", LANG === "en");
+
+  document.getElementById("lb-head").textContent = t.lbHead(w);
+  document.getElementById("lb-cards").innerHTML = w.rows.map(r => `
+    <div class="pcard r${r.rank}">
+      <div class="rank">${esc(r.rank)}</div>
+      <div class="pname">${esc(r.name)}</div>
+      <div class="ptotal"><small>${t.totalLbl}</small><b>${esc(r.total)}</b></div>
+      <div class="bar"><i style="width:${Math.min(100, parseFloat(r.progress)||0)}%"></i></div>
+      <div class="stats">
+        <div class="stat"><span>${t.short[0]}</span><b>${esc(r.minutes)}</b></div>
+        <div class="stat"><span>${t.short[1]}</span><b>${esc(r.progress)}</b></div>
+        <div class="stat"><span>${t.short[2]}</span><b>${esc(r.exercise)}</b></div>
+        <div class="stat"><span>${t.short[3]}</span><b>${esc(r.goals)}</b></div>
+      </div>
+    </div>`).join("");
+  document.getElementById("lb-table").innerHTML =
+    `<thead><tr>${t.cols.map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>` +
+    w.rows.map(r => `<tr><td>${esc(r.rank)}</td><td class="n">${esc(r.name)}</td><td>${esc(r.minutes)}</td><td>${esc(r.progress)}</td><td>${esc(r.exercise)}</td><td>${esc(r.goals)}</td><td class="t">${esc(r.total)}</td></tr>`).join("") +
+    `</tbody>`;
+
+  document.getElementById("prev-list").innerHTML = DATA.previousWeeks.map(pw => `
+    <div class="prev"><h3>${esc(t.prevWeek(pw))}</h3>
+      ${pw.rows.map(r => `<div class="row"><b>${esc(r.name)}</b><span>${t.prevRow(r)}</span></div>`).join("")}
+    </div>`).join("");
+
+  document.getElementById("ref-list").innerHTML = t.refs.map(([a,b]) => `<li>${a}<b>→ ${b}</b></li>`).join("");
+  document.getElementById("rules-list").innerHTML = t.rules.map(r => `<li>${r}</li>`).join("");
+  document.getElementById("goals-list").innerHTML = DATA.personalGoals.map(g => `
+    <div class="gcard"><h3>${esc(g.name)}</h3>
+      <div class="slot"><span>${t.achievable}</span><span class="${g.achievable ? "" : "tbc"}">${g.achievable ? esc(g.achievable[LANG] || g.achievable) : t.tbc}</span></div>
+      <div class="slot"><span>${t.stretch}</span><span class="${g.stretch ? "" : "tbc"}">${g.stretch ? esc(g.stretch[LANG] || g.stretch) : t.tbc}</span></div>
+    </div>`).join("");
+  document.getElementById("tl-list").innerHTML = DATA.timeline.map(x => `
+    <li class="${x.week === "W" + w.number ? "cur" : ""}"><b>${x.week}</b>${x.dates ? esc(x.dates[LANG]) + (x.trial ? (LANG === "zh" ? `（${t.trial}）` : ` (${t.trial})`) : "") : `<span class="tbc">${t.datesTbc}</span>`}</li>`).join("");
+}
+function setLang(l){ LANG = l; try{ localStorage.setItem("lb-lang", l); }catch(e){} render(); }
+try{ const s = localStorage.getItem("lb-lang"); if (s === "en" || s === "zh") LANG = s; }catch(e){}
+render();
+</script>
+</body>
+</html>

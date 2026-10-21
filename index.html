@@ -35,10 +35,27 @@ const DATA = {
       ]
     }
   ],
+  // One block per week. goal1/goal2: null = 待定 / TBC, or a string, or {zh, en}.
+  // goal1Done/goal2Done: true shows a tick on the right.
   personalGoals: [
-    { name: "Clem",  achievable: null, stretch: null },   // null = 待定 / TBC
-    { name: "Dodo",  achievable: null, stretch: null },
-    { name: "Vicky", achievable: null, stretch: null }
+    {
+      week: 1,
+      dates: { zh: "10月12–18日", en: "Oct 12–18" },
+      people: [
+        { name: "Clem",  goal1: null, goal1Done: false, goal2: null, goal2Done: false },
+        { name: "Dodo",  goal1: null, goal1Done: false, goal2: null, goal2Done: false },
+        { name: "Vicky", goal1: null, goal1Done: false, goal2: null, goal2Done: false }
+      ]
+    },
+    {
+      week: 2,
+      dates: { zh: "10月19–25日", en: "Oct 19–25" },
+      people: [
+        { name: "Clem",  goal1: null, goal1Done: false, goal2: null, goal2Done: false },
+        { name: "Dodo",  goal1: null, goal1Done: false, goal2: null, goal2Done: false },
+        { name: "Vicky", goal1: null, goal1Done: false, goal2: null, goal2Done: false }
+      ]
+    }
   ],
   timeline: [
     { week: "W1", dates: { zh: "10月12–18日", en: "Oct 12–18" }, trial: true },
@@ -155,10 +172,19 @@ const DATA = {
     background:var(--brand-soft);color:var(--brand-deep);font-weight:700;font-size:13px;
     display:flex;align-items:center;justify-content:center;
   }
+  .gweek{margin-top:16px}
+  .gweek:first-child{margin-top:0}
+  .gweek > h3{font-family:Fraunces,"Iowan Old Style",Palatino,"Songti TC","PingFang HK",serif;font-size:18px;font-weight:560;margin:0 0 10px}
+  .gweek.cur > h3{color:var(--brand-deep)}
   .goals{display:grid;gap:10px}
   @media (min-width:720px){ .goals{grid-template-columns:repeat(3,1fr)} .ref{grid-template-columns:repeat(4,1fr)} section{padding:22px 22px} }
   .gcard{border:1px solid var(--line);border-radius:16px;padding:14px 14px 8px;background:#fff}
-  .slot{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding:8px 0;border-top:1px dashed var(--line)}
+  .gcard h3{margin-bottom:2px}
+  .slot{display:grid;grid-template-columns:auto 1fr 22px;align-items:center;gap:8px;font-size:13.5px;padding:8px 0;border-top:1px dashed var(--line)}
+  .glabel{font-weight:650;white-space:nowrap}
+  .gtext{min-width:0}
+  .tick{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(72,46,24,.18);display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;color:transparent}
+  .slot.done .tick{background:var(--green);border-color:var(--green);color:#fff;font-weight:700}
   .tbc{color:var(--muted);font-style:italic}
   .tl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;list-style:none;padding:0}
   @media (min-width:720px){ .tl{grid-template-columns:repeat(4,1fr)} }
@@ -246,7 +272,7 @@ const T = {
     score1: "每人每星期目標係 120 分鐘運動。做夠 120 分鐘，運動分攞滿 80 分；做得越接近 120 分鐘，分數跳得越快。",
     refIntro: "幾個參考位：",
     refs: [["36 分鐘（30%）","約 17 分"],["60 分鐘（50%）","40 分"],["84 分鐘（70%）","約 63 分"],["120 分鐘（100%）","80 分"]],
-    score3: "個人目標分最高 20 分：可達成目標 10 分 ＋ 延伸目標 10 分，每星期每項最多計一次。",
+    score3: "個人目標分最高 20 分：目標一 10 分 ＋ 目標二 10 分，每星期每項最多計一次。",
     score4: "每星期總分上限 100 分，分數顯示至小數後一位。",
     sampleTag: "範例 · Sample",
     sampleTitle: "計分例子",
@@ -258,11 +284,14 @@ const T = {
       "任何有 workout 記錄嘅運動都計：跑步、行路、踩單車、游水、HIIT、舉鐵、打波、瑜伽等，一律按記錄時長計。",
       "唔睇心率、唔分 Zone、唔設單次最少分鐘、唔設運動種類門檻。",
       "超過 120 分鐘唔會再加分（運動分封頂 80 分）。",
-      "個人目標分：可達成 10 分 + 延伸 10 分，只可以喺報告話達成咗先計，每星期每項最多一次。",
+      "個人目標分：目標一 10 分 + 目標二 10 分，只可以喺報告話達成咗先計，每星期每項最多一次。",
       "頭兩個星期係試行期 (trial)。"
     ],
     goalsTitle: "個人目標",
-    achievable: "可達成目標", stretch: "延伸目標", tbc: "待定",
+    goalWeek: (week) => `第 ${week.week} 週（${week.dates.zh}）`,
+    goal1: "目標一", goal2: "目標二",
+    done: "已完成", notDone: "未完成",
+    tbc: "待定",
     tlTitle: "時間表（W1–W12）",
     trial: "試行", datesTbc: "日期待定",
     footer: "朋友之間嘅運動小遊戲 · 唔係醫療或體能評估 💪"
@@ -282,7 +311,7 @@ const T = {
     score1: "Everyone's weekly target is 120 minutes of exercise. Hit 120 minutes and you get the full 80 exercise points; the closer you get to 120 minutes, the faster your points climb.",
     refIntro: "A few reference points:",
     refs: [["36 min (30%)","about 17 pts"],["60 min (50%)","40 pts"],["84 min (70%)","about 63 pts"],["120 min (100%)","80 pts"]],
-    score3: "Personal goal points, up to 20: 10 for your achievable goal + 10 for your stretch goal, each counted at most once per week.",
+    score3: "Personal goal points, up to 20: 10 for Goal 1 + 10 for Goal 2, each counted at most once per week.",
     score4: "Weekly total is capped at 100 points; scores are shown to one decimal place.",
     sampleTag: "範例 · Sample",
     sampleTitle: "Scoring example",
@@ -294,11 +323,14 @@ const T = {
       "Any exercise with a workout record counts: running, walking, cycling, swimming, HIIT, weights, ball games, yoga and more — all counted by recorded duration.",
       "No heart-rate checks, no zones, no minimum session length, no restrictions on type of exercise.",
       "Nothing extra beyond 120 minutes (exercise points cap at 80).",
-      "Personal goal points: 10 achievable + 10 stretch, only counted when your report says you've hit it, each at most once per week.",
+      "Personal goal points: 10 for Goal 1 + 10 for Goal 2, only counted when your report says you've hit it, each at most once per week.",
       "The first two weeks are a trial period."
     ],
     goalsTitle: "Personal goals",
-    achievable: "Achievable goal", stretch: "Stretch goal", tbc: "TBC",
+    goalWeek: (week) => `Week ${week.week} (${week.dates.en})`,
+    goal1: "Goal 1", goal2: "Goal 2",
+    done: "Done", notDone: "Not done",
+    tbc: "TBC",
     tlTitle: "Timeline (W1–W12)",
     trial: "trial", datesTbc: "Dates TBC",
     footer: "A friendly game between friends · not a medical or fitness assessment 💪"
@@ -342,10 +374,29 @@ function render(){
 
   document.getElementById("ref-list").innerHTML = t.refs.map(([a,b]) => `<li>${a}<b>→ ${b}</b></li>`).join("");
   document.getElementById("rules-list").innerHTML = t.rules.map(r => `<li>${r}</li>`).join("");
-  document.getElementById("goals-list").innerHTML = DATA.personalGoals.map(g => `
-    <div class="gcard"><h3>${esc(g.name)}</h3>
-      <div class="slot"><span>${t.achievable}</span><span class="${g.achievable ? "" : "tbc"}">${g.achievable ? esc(g.achievable[LANG] || g.achievable) : t.tbc}</span></div>
-      <div class="slot"><span>${t.stretch}</span><span class="${g.stretch ? "" : "tbc"}">${g.stretch ? esc(g.stretch[LANG] || g.stretch) : t.tbc}</span></div>
+  const goalText = (v) => {
+    if (v == null || v === "") return "";
+    if (typeof v === "string") return v;
+    return v[LANG] || v.zh || v.en || "";
+  };
+  const goalSlot = (label, value, done) => {
+    const text = goalText(value);
+    return `<div class="slot${done ? " done" : ""}">
+      <span class="glabel">${label}</span>
+      <span class="gtext${text ? "" : " tbc"}">${text ? esc(text) : t.tbc}</span>
+      <span class="tick" role="img" aria-label="${done ? t.done : t.notDone}">${done ? "✓" : ""}</span>
+    </div>`;
+  };
+  document.getElementById("goals-list").innerHTML = DATA.personalGoals.map(week => `
+    <div class="gweek${week.week === w.number ? " cur" : ""}">
+      <h3>${esc(t.goalWeek(week))}</h3>
+      <div class="goals">
+        ${week.people.map(p => `
+          <div class="gcard"><h3>${esc(p.name)}</h3>
+            ${goalSlot(t.goal1, p.goal1, !!p.goal1Done)}
+            ${goalSlot(t.goal2, p.goal2, !!p.goal2Done)}
+          </div>`).join("")}
+      </div>
     </div>`).join("");
   document.getElementById("tl-list").innerHTML = DATA.timeline.map(x => `
     <li class="${x.week === "W" + w.number ? "cur" : ""}"><b>${x.week}</b>${x.dates ? esc(x.dates[LANG]) + (x.trial ? (LANG === "zh" ? `（${t.trial}）` : ` (${t.trial})`) : "") : `<span class="tbc">${t.datesTbc}</span>`}</li>`).join("");

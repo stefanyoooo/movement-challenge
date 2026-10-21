@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>運動挑戰排行榜 · Movement Challenge Leaderboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 /* =====================================================================
    ✏️  DATA — EDIT ONLY THIS SECTION TO UPDATE SCORES / WEEKS / GOALS
@@ -50,74 +53,120 @@ const DATA = {
 </script>
 <style>
   :root{
-    --bg:#f6f7fb; --card:#fff; --ink:#1d2433; --muted:#667085; --line:#e6e8ef;
-    --brand:#2f6df6; --brand-soft:#e8efff; --green:#12a150; --gold:#f5b301; --gold-soft:#fff6d6;
-    --silver:#a7b0be; --bronze:#d08a4c; --radius:16px;
+    --bg:#efe6d8; --card:#fffdf9; --ink:#241c16; --muted:#74685c; --line:rgba(72,46,24,.12);
+    --brand:#c24d2c; --brand-deep:#8c3118; --brand-soft:#f8e6db; --green:#1c7a4d; --green-soft:#e6f5ec;
+    --gold:#c89212; --gold-soft:#fff6dc; --silver:#8b93a3; --bronze:#b56a32;
+    --radius:22px; --shadow:0 16px 40px rgba(72,40,16,.08);
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang HK","Noto Sans TC","Microsoft JhengHei",Roboto,sans-serif;
-       background:var(--bg);color:var(--ink);line-height:1.55;-webkit-text-size-adjust:100%;overflow-wrap:anywhere}
-  .wrap{max-width:760px;margin:0 auto;padding:16px 14px 48px}
-  header{position:relative;padding:8px 0 4px}
-  .lang{position:absolute;top:6px;right:0;display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
-  .lang button{border:0;background:transparent;font:inherit;font-size:13px;padding:5px 11px;border-radius:999px;color:var(--muted);cursor:pointer}
-  .lang button.on{background:var(--brand);color:#fff}
-  h1{font-size:26px;margin:38px 0 8px;letter-spacing:.5px}
-  h1 .emoji{margin-right:4px}
-  .pill{display:inline-block;background:#e7f7ee;color:var(--green);font-weight:600;font-size:13px;padding:4px 12px;border-radius:999px}
-  .note{color:var(--muted);font-size:13px;margin:8px 0 0}
-  section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-top:16px}
-  h2{font-size:18px;margin:0 0 12px}
+  body{
+    font-family:Outfit,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang HK","Noto Sans TC","Microsoft JhengHei",Roboto,sans-serif;
+    background:
+      radial-gradient(820px 380px at -8% -10%, #ffd7c2 0%, transparent 62%),
+      radial-gradient(680px 360px at 112% -6%, #f6d48a 0%, transparent 58%),
+      linear-gradient(180deg,#f7f1e7 0%, #efe6d8 42%, #f6f1e8 100%);
+    color:var(--ink);line-height:1.55;-webkit-text-size-adjust:100%;overflow-wrap:anywhere;
+    min-height:100vh;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:22px 16px 64px}
+  header{
+    display:flex;flex-direction:column;align-items:flex-start;
+    padding:16px 20px 20px;border-radius:28px;
+    background:linear-gradient(160deg,rgba(255,253,249,.92),rgba(255,246,236,.72));
+    border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow);
+  }
+  .lang{align-self:flex-end;display:flex;background:rgba(255,253,249,.9);border:1px solid var(--line);border-radius:999px;padding:3px;box-shadow:0 1px 0 rgba(255,255,255,.8);margin-bottom:2px}
+  .lang button{border:0;background:transparent;font:inherit;font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;color:var(--muted);cursor:pointer}
+  .lang button.on{background:var(--ink);color:#fff8ef}
+  h1{
+    font-family:Fraunces,"Iowan Old Style",Palatino,"Songti TC","PMingLiU","PingFang HK",serif;
+    font-size:clamp(32px,6vw,46px);font-weight:560;letter-spacing:-.03em;line-height:1.12;
+    margin:14px 0 10px;
+  }
+  h1 .emoji{margin-right:6px}
+  .pill{display:inline-block;background:var(--green-soft);color:var(--green);font-weight:650;font-size:12.5px;letter-spacing:.02em;padding:5px 12px;border-radius:999px}
+  .note{color:var(--muted);font-size:14px;margin:0;max-width:38em}
+  section{
+    background:var(--card);border:1px solid rgba(255,255,255,.7);border-radius:var(--radius);
+    padding:20px 18px;margin-top:16px;box-shadow:var(--shadow);
+  }
+  h2{
+    font-family:Fraunces,"Iowan Old Style",Palatino,"Songti TC","PingFang HK",serif;
+    font-size:23px;font-weight:560;letter-spacing:-.02em;margin:0 0 14px;line-height:1.25;
+  }
   h3{font-size:15px;margin:0 0 8px}
-  ul,ol{margin:0;padding-left:20px}
-  li{margin:4px 0}
+  ul,ol{margin:0;padding-left:0;list-style:none}
+  li{margin:0}
   .muted{color:var(--muted)}
-  /* leaderboard cards (mobile) */
-  .cards{display:grid;gap:10px}
-  .pcard{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center}
-  .rank{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;background:var(--brand)}
-  .r1 .rank{background:var(--gold)} .r2 .rank{background:var(--silver)} .r3 .rank{background:var(--bronze)}
-  .pname{font-weight:700;font-size:17px}
+  .cards{display:grid;gap:12px}
+  .pcard{
+    position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;
+    padding:14px 14px 12px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;
+    background:#fff;
+  }
+  .pcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+  .r1{background:linear-gradient(180deg,#fff8e8,#fff)}
+  .r1::before{background:linear-gradient(#f3d36a,#b8860b)}
+  .r2{background:linear-gradient(180deg,#f6f7fa,#fff)}
+  .r2::before{background:linear-gradient(#d5dbe6,#8b93a3)}
+  .r3{background:linear-gradient(180deg,#fff4eb,#fff)}
+  .r3::before{background:linear-gradient(#e2b089,#b56a32)}
+  .rank{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:#fff;background:var(--brand);box-shadow:inset 0 -2px 0 rgba(0,0,0,.15)}
+  .r1 .rank{background:linear-gradient(180deg,#f0c94a,#c89212);color:#3d2c00}
+  .r2 .rank{background:linear-gradient(180deg,#d7dee8,#8e97a8);color:#1d2430}
+  .r3 .rank{background:linear-gradient(180deg,#e0a36a,#b56a32);color:#3b220c}
+  .pname{font-weight:700;font-size:18px;letter-spacing:-.01em}
   .ptotal{text-align:right}
-  .ptotal b{font-size:24px;display:block;line-height:1.1}
-  .ptotal small{color:var(--muted);font-size:11px}
-  .bar{grid-column:1/-1;height:8px;background:var(--brand-soft);border-radius:99px;overflow:hidden;margin-top:4px}
-  .bar i{display:block;height:100%;background:var(--brand);border-radius:99px}
-  .stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
-  .stat{background:var(--bg);border-radius:10px;padding:6px 4px;text-align:center}
+  .ptotal b{font-family:Fraunces,"Iowan Old Style",Palatino,serif;font-size:30px;font-weight:560;display:block;line-height:1;letter-spacing:-.03em}
+  .ptotal small{color:var(--muted);font-size:11px;letter-spacing:.04em}
+  .bar{grid-column:1/-1;height:9px;background:#f3e7da;border-radius:99px;overflow:hidden;margin-top:6px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#e7a15a,var(--brand));border-radius:99px}
+  .stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+  .stat{background:rgba(255,252,247,.85);border:1px solid rgba(72,46,24,.06);border-radius:12px;padding:7px 4px;text-align:center}
   .stat span{display:block;font-size:10.5px;color:var(--muted);line-height:1.25}
   .stat b{font-size:14px}
-  /* table (wider screens) */
   table{width:100%;border-collapse:collapse;display:none;font-size:14px}
-  th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:center}
-  th{font-size:12px;color:var(--muted);font-weight:600}
-  td.n{text-align:left;font-weight:700}
-  td.t{font-weight:700;font-size:16px}
-  @media (min-width:640px){ table.lb{display:table} .cards.lb{display:none} }
-  .prev{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}
+  th,td{padding:12px 8px;border-bottom:1px solid var(--line);text-align:center}
+  th{font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+  td.n{text-align:left;font-weight:700;font-size:16px}
+  td.t{font-family:Fraunces,"Iowan Old Style",Palatino,serif;font-weight:560;font-size:22px;letter-spacing:-.03em}
+  tr:last-child td{border-bottom:0}
+  td.rankcell{width:52px}
+  .mini{display:block;height:5px;margin-top:5px;background:#f3e7da;border-radius:99px;overflow:hidden}
+  .mini i{display:block;height:100%;background:linear-gradient(90deg,#e7a15a,var(--brand));border-radius:99px}
+  @media (min-width:980px){ table.lb{display:table} .cards.lb{display:none} section{padding:22px 22px} }
+  .prev{border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:8px;background:#fff}
   .prev .row{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
-  .ref{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0 10px;padding:0;list-style:none}
-  .ref li{margin:0;background:var(--brand-soft);border-radius:10px;padding:8px;text-align:center;font-size:13px}
-  .ref li b{display:block;font-size:16px;color:var(--brand)}
-  .sample{background:var(--gold-soft);border:2px solid var(--gold)}
-  .tag{display:inline-block;background:var(--gold);color:#3b2b00;font-weight:700;font-size:12px;padding:3px 10px;border-radius:999px;margin-bottom:8px}
-  .chat{display:flex;flex-direction:column;gap:10px}
-  .bubble{max-width:88%;padding:10px 14px;border-radius:18px;font-size:14.5px}
-  .bubble.in{align-self:flex-start;background:#eef0f5;border-bottom-left-radius:6px}
-  .bubble.out{align-self:flex-end;background:#d9fdd3;border-bottom-right-radius:6px}
-  .bubble.no{align-self:flex-start;background:#fff1f0;border-bottom-left-radius:6px}
+  .score-list > li{padding:10px 0;border-bottom:1px solid var(--line)}
+  .score-list > li:last-child{border-bottom:0;padding-bottom:0}
+  .ref{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0 2px;padding:0;list-style:none}
+  .ref li{margin:0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center;font-size:13px}
+  .ref li b{display:block;font-size:15px;color:var(--brand-deep);margin-top:2px}
+  .sample{background:linear-gradient(180deg,#fffaf0,#fffdf8);border:1px solid #efd48a;box-shadow:none}
+  .tag{display:inline-block;background:#f6d56b;color:#3b2b00;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px;margin-bottom:10px}
+  .sample p{margin:0 0 8px}
+  .sample .muted{margin:0;font-size:13px}
+  #rules-list{counter-reset:rule}
+  #rules-list li{counter-increment:rule;position:relative;padding:11px 0 11px 42px;border-bottom:1px solid var(--line)}
+  #rules-list li:last-child{border-bottom:0;padding-bottom:0}
+  #rules-list li::before{
+    content:counter(rule);position:absolute;left:0;top:10px;width:28px;height:28px;border-radius:50%;
+    background:var(--brand-soft);color:var(--brand-deep);font-weight:700;font-size:13px;
+    display:flex;align-items:center;justify-content:center;
+  }
   .goals{display:grid;gap:10px}
-  @media (min-width:640px){ .goals{grid-template-columns:repeat(3,1fr)} }
-  .gcard{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-  .slot{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding:4px 0;border-top:1px dashed var(--line)}
+  @media (min-width:720px){ .goals{grid-template-columns:repeat(3,1fr)} .ref{grid-template-columns:repeat(4,1fr)} section{padding:22px 22px} }
+  .gcard{border:1px solid var(--line);border-radius:16px;padding:14px 14px 8px;background:#fff}
+  .slot{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding:8px 0;border-top:1px dashed var(--line)}
   .tbc{color:var(--muted);font-style:italic}
   .tl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;list-style:none;padding:0}
-  @media (min-width:640px){ .tl{grid-template-columns:repeat(4,1fr)} }
-  .tl li{margin:0;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
-  .tl li b{display:block}
-  .tl li.cur{border-color:var(--brand);background:var(--brand-soft)}
-  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+  @media (min-width:720px){ .tl{grid-template-columns:repeat(4,1fr)} }
+  .tl li{margin:0;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:13px;background:#fff}
+  .tl li b{display:block;font-family:Fraunces,"Iowan Old Style",Palatino,serif;font-size:16px;font-weight:560}
+  .tl li.cur{border-color:transparent;background:var(--ink);color:#fff8ef}
+  .tl li.cur .tbc{color:#fff8ef}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:22px}
 </style>
 </head>
 <body>
@@ -127,8 +176,8 @@ const DATA = {
       <button id="btn-zh" class="on" onclick="setLang('zh')">繁中</button>
       <button id="btn-en" onclick="setLang('en')">EN</button>
     </div>
-    <h1><span class="emoji">🏃</span><span data-i="title"></span></h1>
     <span class="pill" data-i="pill"></span>
+    <h1><span class="emoji">🏃</span><span data-i="title"></span></h1>
     <p class="note" data-i="note"></p>
   </header>
 
@@ -145,7 +194,7 @@ const DATA = {
 
   <section id="scoring">
     <h2 data-i="scoreTitle"></h2>
-    <ul>
+    <ul class="score-list">
       <li data-i="score1"></li>
       <li><span data-i="refIntro"></span>
         <ul class="ref" id="ref-list"></ul>
@@ -158,22 +207,13 @@ const DATA = {
   <section class="sample" id="example">
     <span class="tag" data-i="sampleTag"></span>
     <h2 data-i="sampleTitle"></h2>
-    <p style="margin:0 0 8px" data-i="sampleBody"></p>
-    <p class="muted" style="margin:0;font-size:13px" data-i="sampleNote"></p>
+    <p data-i="sampleBody"></p>
+    <p class="muted" data-i="sampleNote"></p>
   </section>
 
   <section id="rules">
     <h2 data-i="rulesTitle"></h2>
     <ol id="rules-list"></ol>
-  </section>
-
-  <section id="submit">
-    <h2 data-i="submitTitle"></h2>
-    <div class="chat">
-      <div class="bubble out" data-i="sub1"></div>
-      <div class="bubble out" data-i="sub2"></div>
-      <div class="bubble no" data-i="sub3"></div>
-    </div>
   </section>
 
   <section id="goals">
@@ -221,10 +261,6 @@ const T = {
       "個人目標分：可達成 10 分 + 延伸 10 分，只可以喺報告話達成咗先計，每星期每項最多一次。",
       "頭兩個星期係試行期 (trial)。"
     ],
-    submitTitle: "交報告要交啲乜",
-    sub1: "📸 一張 workout summary 截圖，見到「日期 + 時長」就得；或者打一行字：名 + 邊日 + 做咗乜 + 幾多分鐘。",
-    sub2: "🎯 如果達成咗個人目標，講多一句就得。",
-    sub3: "🙅 唔使交：心率 Zone 圖、體重、GPS 路線、完整心率圖 — 全部唔使。",
     goalsTitle: "個人目標",
     achievable: "可達成目標", stretch: "延伸目標", tbc: "待定",
     tlTitle: "時間表（W1–W12）",
@@ -261,10 +297,6 @@ const T = {
       "Personal goal points: 10 achievable + 10 stretch, only counted when your report says you've hit it, each at most once per week.",
       "The first two weeks are a trial period."
     ],
-    submitTitle: "What to send in",
-    sub1: "📸 A screenshot of your workout summary — as long as it shows the date + duration; or just type one line: name + which day + what you did + how many minutes.",
-    sub2: "🎯 If you hit a personal goal, just mention it.",
-    sub3: "🙅 No need to send: heart-rate zone charts, weight, GPS routes or full heart-rate graphs — none of it.",
     goalsTitle: "Personal goals",
     achievable: "Achievable goal", stretch: "Stretch goal", tbc: "TBC",
     tlTitle: "Timeline (W1–W12)",
@@ -300,7 +332,7 @@ function render(){
     </div>`).join("");
   document.getElementById("lb-table").innerHTML =
     `<thead><tr>${t.cols.map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>` +
-    w.rows.map(r => `<tr><td>${esc(r.rank)}</td><td class="n">${esc(r.name)}</td><td>${esc(r.minutes)}</td><td>${esc(r.progress)}</td><td>${esc(r.exercise)}</td><td>${esc(r.goals)}</td><td class="t">${esc(r.total)}</td></tr>`).join("") +
+    w.rows.map(r => `<tr class="r${r.rank}"><td class="rankcell"><span class="rank">${esc(r.rank)}</span></td><td class="n">${esc(r.name)}</td><td>${esc(r.minutes)}</td><td>${esc(r.progress)}<span class="mini"><i style="width:${Math.min(100, parseFloat(r.progress)||0)}%"></i></span></td><td>${esc(r.exercise)}</td><td>${esc(r.goals)}</td><td class="t">${esc(r.total)}</td></tr>`).join("") +
     `</tbody>`;
 
   document.getElementById("prev-list").innerHTML = DATA.previousWeeks.map(pw => `

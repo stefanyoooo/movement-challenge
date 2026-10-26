@@ -17,9 +17,15 @@
    ===================================================================== */
 const DATA = {
   currentWeek: {
+    number: 3,
+    dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" },
+    status: { zh: "進行中", en: "in progress" },
+    rows: []
+  },
+  previousWeeks: [
+    {
     number: 2,
     dates: { zh: "10月19–25日", en: "Oct 19–25" },
-    status: { zh: "進行中", en: "in progress" },
     rows: [
       { rank: 1, name: "Dodo",  minutes: "189.4", progress: "100%",  exercise: "80.0", goals: "0.0", total: "80.0" },
       { rank: 1, name: "Vicky", minutes: "286.7", progress: "100%",  exercise: "80.0", goals: "0.0", total: "80.0" },
@@ -27,7 +33,6 @@ const DATA = {
       { rank: 4, name: "Patrick", minutes: "88.5", progress: "73.7%", exercise: "66.3", goals: "0.0", total: "66.3" }
     ]
   },
-  previousWeeks: [
     {
       number: 1,
       dates: { zh: "10月12–18日, 2026", en: "Oct 12–18, 2026" },
@@ -39,6 +44,15 @@ const DATA = {
   // One block per week. goal1/goal2: null = 待定 / TBC, or a string, or {zh, en}.
   // goal1Done/goal2Done: true shows a tick on the right.
   personalGoals: [
+    {
+      week: 3,
+      dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" },
+      people: [
+        { name: "Stef", goal1: "cycling two times this week", goal1Done: false, goal2: "HIIT once", goal2Done: false },
+        { name: "Heena", goal1: "Average 20K steps this week", goal1Done: false, goal2: "HIIT once", goal2Done: false },
+        { name: "Carmen", goal1: "hit the gym 4 times this week", goal1Done: false, goal2: "get 10k steps every day", goal2Done: false }
+      ]
+    },
     {
       week: 1,
       dates: { zh: "10月12–18日", en: "Oct 12–18" },
@@ -61,7 +75,7 @@ const DATA = {
   timeline: [
     { week: "W1", dates: { zh: "10月12–18日", en: "Oct 12–18" }, trial: true },
     { week: "W2", dates: { zh: "10月19–25日", en: "Oct 19–25" }, trial: true },
-    { week: "W3", dates: null }, { week: "W4", dates: null }, { week: "W5", dates: null },
+    { week: "W3", dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" } }, { week: "W4", dates: null }, { week: "W5", dates: null },
     { week: "W6", dates: null }, { week: "W7", dates: null }, { week: "W8", dates: null },
     { week: "W9", dates: null }, { week: "W10", dates: null }, { week: "W11", dates: null },
     { week: "W12", dates: null }      // null = 日期待定 / Dates TBC

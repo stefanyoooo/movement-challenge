@@ -171,6 +171,10 @@ const DATA = {
   .mini{display:block;height:5px;margin-top:5px;background:#f3e7da;border-radius:99px;overflow:hidden}
   .mini i{display:block;height:100%;background:linear-gradient(90deg,#e7a15a,var(--brand));border-radius:99px}
   @media (min-width:980px){ table.lb{display:table} .cards.lb{display:none} section{padding:22px 22px} }
+  #past-results > summary{cursor:pointer;border-radius:8px}
+  #past-results > summary h2{display:inline;margin:0}
+  #past-results > summary:focus-visible{outline:2px solid var(--brand);outline-offset:6px}
+  #past-results[open] > summary{margin-bottom:14px}
   .prev{border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:8px;background:#fff}
   .prev .row{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
   .score-list > li{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -234,8 +238,10 @@ const DATA = {
   </section>
 
   <section id="previous">
-    <h2 data-i="prevTitle"></h2>
-    <div id="prev-list"></div>
+    <details id="past-results">
+      <summary><h2 data-i="prevTitle"></h2></summary>
+      <div id="prev-list"></div>
+    </details>
   </section>
 
   <section id="scoring">

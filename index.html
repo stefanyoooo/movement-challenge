@@ -22,9 +22,9 @@ const DATA = {
     status: { zh: "進行中", en: "in progress" },
     rows: [
       { rank: 1, name: "Irene", minutes: "480.0", progress: "100%", exercise: "80.0", goals: "20.0", total: "100.0" },
-      { rank: 2, name: "Dodo", minutes: "121.4", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 2, name: "Patrick", minutes: "147.8", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 2, name: "Vicky", minutes: "326.5", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
+      { rank: 1, name: "Vicky", minutes: "326.5", progress: "100%", exercise: "80.0", goals: "20.0", total: "100.0" },
+      { rank: 3, name: "Dodo", minutes: "121.4", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
+      { rank: 3, name: "Patrick", minutes: "147.8", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
       { rank: 5, name: "Carmen", minutes: "53.9", progress: "44.9%", exercise: "34.0", goals: "0.0", total: "34.0" },
       { rank: 6, name: "Stef", minutes: "40.1", progress: "33.4%", exercise: "20.8", goals: "0.0", total: "20.8" }
     ]
@@ -59,7 +59,7 @@ const DATA = {
         { name: "Stef", goal1: "cycling two times this week", goal1Done: false, goal2: "HIIT once", goal2Done: false },
         { name: "Heena", goal1: "Average 20K steps this week", goal1Done: false, goal2: "HIIT once", goal2Done: false },
         { name: "Carmen", goal1: "hit the gym 4 times this week", goal1Done: false, goal2: "get 10k steps every day", goal2Done: false },
-        { name: "Vicky", goal1: "run 2 times this week", goal1Done: false, goal2: "strength and conditionings 2 times this week", goal2Done: false },
+        { name: "Vicky", goal1: "run 2 times this week", goal1Done: true, goal2: "strength and conditionings 2 times this week", goal2Done: true },
         { name: "Clem", goal1: "average 10K steps", goal1Done: false, goal2: "functional Strength or weight 2 times", goal2Done: false }
       ]
     },
@@ -178,10 +178,10 @@ const DATA = {
   .mini{display:block;height:5px;margin-top:5px;background:#f3e7da;border-radius:99px;overflow:hidden}
   .mini i{display:block;height:100%;background:linear-gradient(90deg,#e7a15a,var(--brand));border-radius:99px}
   @media (min-width:980px){ table.lb{display:table} .cards.lb{display:none} section{padding:22px 22px} }
-  #past-results > summary{cursor:pointer;border-radius:8px}
-  #past-results > summary h2{display:inline;margin:0}
-  #past-results > summary:focus-visible{outline:2px solid var(--brand);outline-offset:6px}
-  #past-results[open] > summary{margin-bottom:14px}
+  details.disclosure > summary{cursor:pointer;border-radius:8px}
+  details.disclosure > summary h2{display:inline;margin:0}
+  details.disclosure > summary:focus-visible{outline:2px solid var(--brand);outline-offset:6px}
+  details.disclosure[open] > summary{margin-bottom:14px}
   .prev{border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:8px;background:#fff}
   .prev .row{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
   .score-list > li{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -202,6 +202,8 @@ const DATA = {
     display:flex;align-items:center;justify-content:center;
   }
   #goals-list{display:block}
+  #goal-week{display:block;max-width:100%;margin:10px 0 16px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+  #goal-week:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
   .gweek{width:100%;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
   .gweek:first-child{margin-top:0;padding-top:0;border-top:0}
   .gweek > h3{font-family:Fraunces,"Iowan Old Style",Palatino,"Songti TC","PingFang HK",serif;font-size:18px;font-weight:560;margin:0 0 10px}
@@ -244,15 +246,29 @@ const DATA = {
     <table class="lb" id="lb-table"></table>
   </section>
 
+  <section id="goals">
+    <h2 data-i="goalsTitle"></h2>
+    <label for="goal-week" data-i="selectWeek"></label>
+    <select id="goal-week" onchange="selectGoalWeek(this.value)"></select>
+    <div class="goals" id="goals-list"></div>
+  </section>
+
+  <section id="rules">
+    <details class="disclosure" id="rules-details"><summary><h2 data-i="rulesTitle"></h2></summary>
+    <ol id="rules-list"></ol>
+  </details>
+  </section>
+
   <section id="previous">
-    <details id="past-results">
+    <details class="disclosure" id="past-results">
       <summary><h2 data-i="prevTitle"></h2></summary>
       <div id="prev-list"></div>
+      <h3 data-i="otherGoals"></h3><div id="past-goals-list"></div>
     </details>
   </section>
 
   <section id="scoring">
-    <h2 data-i="scoreTitle"></h2>
+    <details class="disclosure" id="scoring-details"><summary><h2 data-i="scoreTitle"></h2></summary>
     <ul class="score-list">
       <li data-i="score1"></li>
       <li><span data-i="refIntro"></span>
@@ -261,28 +277,20 @@ const DATA = {
       <li data-i="score3"></li>
       <li data-i="score4"></li>
     </ul>
+  </details>
   </section>
 
   <section class="sample" id="example">
-    <span class="tag" data-i="sampleTag"></span>
-    <h2 data-i="sampleTitle"></h2>
+    <details class="disclosure" id="example-details"><summary><h2 data-i="sampleTitle"></h2></summary>
     <p data-i="sampleBody"></p>
     <p class="muted" data-i="sampleNote"></p>
-  </section>
-
-  <section id="rules">
-    <h2 data-i="rulesTitle"></h2>
-    <ol id="rules-list"></ol>
-  </section>
-
-  <section id="goals">
-    <h2 data-i="goalsTitle"></h2>
-    <div class="goals" id="goals-list"></div>
+  </details>
   </section>
 
   <section id="timeline">
-    <h2 data-i="tlTitle"></h2>
+    <details class="disclosure" id="timeline-details"><summary><h2 data-i="tlTitle"></h2></summary>
     <ul class="tl" id="tl-list"></ul>
+  </details>
   </section>
 
   <footer data-i="footer"></footer>
@@ -292,14 +300,14 @@ const DATA = {
 const T = {
   zh: {
     title: "運動挑戰排行榜",
-    pill: "試行期 · 已入帳",
-    note: "正式開始日期待定 · 暫按曆週（星期一至日）計分",
-    lbHead: (w) => `本週排行榜 · 第 ${w.number} 週（${w.dates.zh} · ${w.status.zh}）`,
+    pill: "正式挑戰 · 已入帳",
+    note: "正式第 1 週：10月26日–11月1日 · 按星期一至日計分",
+    lbHead: (w) => `本週排行榜 · 第 ${displayWeek(w.number)} 週（${w.dates.zh} · ${w.status.zh}）`,
     cols: ["名次", "參加者", "本週分鐘", "進度", "運動分 /80", "目標分 /20", "總分"],
     short: ["分鐘", "進度", "運動 /80", "目標 /20"],
     totalLbl: "總分",
     prevTitle: "歷週成績",
-    prevWeek: (w) => `第 ${w.number} 週（${w.dates.zh}）`,
+    prevWeek: (w) => `第 ${displayWeek(w.number)} 週（${w.number <= 2 ? "試行 · " : ""}${w.dates.zh}）`,
     prevRow: (r) => `${r.minutes} 分鐘 · ${r.progress} · 運動 ${r.exercise} ＋ 目標 ${r.goals} ＝ <b>${r.total}</b>`,
     scoreTitle: "點計分",
     score1: "每人每星期目標係 120 分鐘運動。做夠 120 分鐘，運動分攞滿 80 分；做得越接近 120 分鐘，分數跳得越快。",
@@ -320,25 +328,25 @@ const T = {
       "個人目標分：目標一 10 分 + 目標二 10 分，只可以喺報告話達成咗先計，每星期每項最多一次。",
       "頭兩個星期係試行期 (trial)。"
     ],
-    goalsTitle: "個人目標",
-    goalWeek: (week) => `第 ${week.week} 週（${week.dates.zh}）`,
+    goalsTitle: "個人目標", selectWeek: "選擇目標週別", otherGoals: "其他週個人目標",
+    goalWeek: (week) => `第 ${displayWeek(week.week)} 週（${week.week <= 2 ? "試行 · " : ""}${week.dates.zh}）`,
     goal1: "目標一", goal2: "目標二",
     done: "已完成", notDone: "未完成",
     tbc: "待定",
-    tlTitle: "時間表（W1–W12）",
+    tlTitle: "時間表",
     trial: "試行", datesTbc: "日期待定",
     footer: "朋友之間嘅運動小遊戲 · 唔係醫療或體能評估 💪"
   },
   en: {
     title: "Movement Challenge Leaderboard",
-    pill: "Trial · entries recorded",
-    note: "Formal start date to be confirmed · scored by calendar weeks (Mon–Sun) for now",
-    lbHead: (w) => `Leaderboard · Week ${w.number} (${w.dates.en} · ${w.status.en})`,
+    pill: "Challenge · entries recorded",
+    note: "Week 1: Oct 26–Nov 1 · scored Monday–Sunday",
+    lbHead: (w) => `Leaderboard · Week ${displayWeek(w.number)} (${w.dates.en} · ${w.status.en})`,
     cols: ["Rank", "Name", "Minutes", "Progress", "Exercise /80", "Goals /20", "Total"],
     short: ["Minutes", "Progress", "Exercise /80", "Goals /20"],
     totalLbl: "Total",
     prevTitle: "Previous weeks",
-    prevWeek: (w) => `Week ${w.number} (${w.dates.en})`,
+    prevWeek: (w) => `Week ${displayWeek(w.number)} (${w.number <= 2 ? "Trial · " : ""}${w.dates.en})`,
     prevRow: (r) => `${r.minutes} min · ${r.progress} · Exercise ${r.exercise} + Goals ${r.goals} = <b>${r.total}</b>`,
     scoreTitle: "How scoring works",
     score1: "Everyone's weekly target is 120 minutes of exercise. Hit 120 minutes and you get the full 80 exercise points; the closer you get to 120 minutes, the faster your points climb.",
@@ -359,18 +367,21 @@ const T = {
       "Personal goal points: 10 for Goal 1 + 10 for Goal 2, only counted when your report says you've hit it, each at most once per week.",
       "The first two weeks are a trial period."
     ],
-    goalsTitle: "Personal goals",
-    goalWeek: (week) => `Week ${week.week} (${week.dates.en})`,
+    goalsTitle: "Personal goals", selectWeek: "Choose goal week", otherGoals: "Other weeks’ personal goals",
+    goalWeek: (week) => `Week ${displayWeek(week.week)} (${week.week <= 2 ? "Trial · " : ""}${week.dates.en})`,
     goal1: "Goal 1", goal2: "Goal 2",
     done: "Done", notDone: "Not done",
     tbc: "TBC",
-    tlTitle: "Timeline (W1–W12)",
+    tlTitle: "Timeline",
     trial: "trial", datesTbc: "Dates TBC",
     footer: "A friendly game between friends · not a medical or fitness assessment 💪"
   }
 };
 
 let LANG = "zh";
+let GOAL_WEEK = DATA.currentWeek.number;
+function displayWeek(n){ return Math.max(0, Number(n) - 2); }
+function selectGoalWeek(n){ GOAL_WEEK = Number(n); document.getElementById("past-results").open = false; render(); }
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 
 function render(){
@@ -420,7 +431,7 @@ function render(){
       <span class="tick" role="img" aria-label="${done ? t.done : t.notDone}">${done ? "✓" : ""}</span>
     </div>`;
   };
-  document.getElementById("goals-list").innerHTML = DATA.personalGoals.map(week => `
+  const renderGoals = weeks => weeks.map(week => `
     <div class="gweek${week.week === w.number ? " cur" : ""}">
       <h3>${esc(t.goalWeek(week))}</h3>
       <div class="goals">
@@ -431,8 +442,11 @@ function render(){
           </div>`).join("")}
       </div>
     </div>`).join("");
+  document.getElementById("goal-week").innerHTML = DATA.personalGoals.map(week => `<option value="${week.week}"${week.week === GOAL_WEEK ? " selected" : ""}>${esc(t.goalWeek(week))}</option>`).join("");
+  document.getElementById("goals-list").innerHTML = renderGoals(DATA.personalGoals.filter(week => week.week === GOAL_WEEK));
+  document.getElementById("past-goals-list").innerHTML = renderGoals(DATA.personalGoals.filter(week => week.week !== GOAL_WEEK));
   document.getElementById("tl-list").innerHTML = DATA.timeline.map(x => `
-    <li class="${x.week === "W" + w.number ? "cur" : ""}"><b>${x.week}</b>${x.dates ? esc(x.dates[LANG]) + (x.trial ? (LANG === "zh" ? `（${t.trial}）` : ` (${t.trial})`) : "") : `<span class="tbc">${t.datesTbc}</span>`}</li>`).join("");
+    <li class="${x.week === "W" + w.number ? "cur" : ""}"><b>${LANG === "zh" ? "第 " + displayWeek(x.week.slice(1)) + " 週" : "Week " + displayWeek(x.week.slice(1))}</b>${x.dates ? esc(x.dates[LANG]) + (x.trial ? (LANG === "zh" ? `（${t.trial}）` : ` (${t.trial})`) : "") : `<span class="tbc">${t.datesTbc}</span>`}</li>`).join("");
 }
 function setLang(l){ LANG = l; try{ localStorage.setItem("lb-lang", l); }catch(e){} render(); }
 try{ const s = localStorage.getItem("lb-lang"); if (s === "en" || s === "zh") LANG = s; }catch(e){}

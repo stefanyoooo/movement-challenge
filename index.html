@@ -17,9 +17,17 @@
    ===================================================================== */
 const DATA = {
   currentWeek: {
+    number: 4,
+    dates: { zh: "11月2–8日", en: "Nov 2–8" },
+    status: { zh: "進行中", en: "in progress" },
+    rows: [
+      { rank: 1, name: "Patrick", minutes: "95.4", progress: "79.5%", exercise: "71.3", goals: "0.0", total: "71.3" }
+    ]
+  },
+  previousWeeks: [
+    {
     number: 3,
     dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" },
-    status: { zh: "進行中", en: "in progress" },
     rows: [
       { rank: 1, name: "Irene", minutes: "480.0", progress: "100%", exercise: "80.0", goals: "20.0", total: "100.0" },
       { rank: 1, name: "Vicky", minutes: "326.5", progress: "100%", exercise: "80.0", goals: "20.0", total: "100.0" },
@@ -29,7 +37,6 @@ const DATA = {
       { rank: 6, name: "Stef", minutes: "40.1", progress: "33.4%", exercise: "20.8", goals: "0.0", total: "20.8" }
     ]
   },
-  previousWeeks: [
     {
     number: 2,
     dates: { zh: "10月19–25日", en: "Oct 19–25" },
@@ -51,6 +58,7 @@ const DATA = {
   // One block per week. goal1/goal2: null = 待定 / TBC, or a string, or {zh, en}.
   // goal1Done/goal2Done: true shows a tick on the right.
   personalGoals: [
+    { week: 4, dates: { zh: "11月2–8日", en: "Nov 2–8" }, people: [] },
     {
       week: 3,
       dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" },
@@ -85,7 +93,7 @@ const DATA = {
   timeline: [
     { week: "W1", dates: { zh: "10月12–18日", en: "Oct 12–18" }, trial: true },
     { week: "W2", dates: { zh: "10月19–25日", en: "Oct 19–25" }, trial: true },
-    { week: "W3", dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" } }, { week: "W4", dates: null }, { week: "W5", dates: null },
+    { week: "W3", dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" } }, { week: "W4", dates: { zh: "11月2–8日", en: "Nov 2–8" } }, { week: "W5", dates: null },
     { week: "W6", dates: null }, { week: "W7", dates: null }, { week: "W8", dates: null },
     { week: "W9", dates: null }, { week: "W10", dates: null }, { week: "W11", dates: null },
     { week: "W12", dates: null }      // null = 日期待定 / Dates TBC

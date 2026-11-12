@@ -16,95 +16,404 @@
    • Keep rows in rank order. Text fields with {zh, en} are bilingual.
    ===================================================================== */
 const DATA = {
-  currentWeek: {
-    number: 4,
-    dates: { zh: "11月2–8日", en: "Nov 2–8" },
-    status: { zh: "進行中", en: "in progress" },
-    rows: [
-      { rank: 1, name: "Vicky", minutes: "240.1", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 1, name: "Irene", minutes: "360.0", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 1, name: "Patrick", minutes: "237.9", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 4, name: "Dodo", minutes: "115.3", progress: "96.0%", exercise: "79.6", goals: "0.0", total: "79.6" }
+  "currentWeek": {
+    "number": 4,
+    "dates": {
+      "zh": "11月2–8日",
+      "en": "Nov 2–8"
+    },
+    "status": {
+      "zh": "進行中",
+      "en": "in progress"
+    },
+    "rows": [
+      {
+        "rank": 1,
+        "name": "Vicky",
+        "minutes": "240.1",
+        "progress": "100%",
+        "exercise": "80.0",
+        "goals": "0.0",
+        "total": "80.0"
+      },
+      {
+        "rank": 1,
+        "name": "Irene",
+        "minutes": "420.0",
+        "progress": "100%",
+        "exercise": "80.0",
+        "goals": "0.0",
+        "total": "80.0"
+      },
+      {
+        "rank": 1,
+        "name": "Patrick",
+        "minutes": "237.9",
+        "progress": "100%",
+        "exercise": "80.0",
+        "goals": "0.0",
+        "total": "80.0"
+      },
+      {
+        "rank": 4,
+        "name": "Dodo",
+        "minutes": "115.3",
+        "progress": "96.0%",
+        "exercise": "79.6",
+        "goals": "0.0",
+        "total": "79.6"
+      },
+      {
+        "name": "Clem",
+        "goals": "0.0",
+        "minutes": "44.5",
+        "progress": "37.1%",
+        "exercise": "24.8",
+        "total": "24.8",
+        "rank": 5
+      }
     ]
   },
-  previousWeeks: [
+  "previousWeeks": [
     {
-    number: 3,
-    dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" },
-    rows: [
-      { rank: 1, name: "Irene", minutes: "480.0", progress: "100%", exercise: "80.0", goals: "20.0", total: "100.0" },
-      { rank: 1, name: "Vicky", minutes: "326.5", progress: "100%", exercise: "80.0", goals: "20.0", total: "100.0" },
-      { rank: 3, name: "Dodo", minutes: "121.4", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 3, name: "Patrick", minutes: "147.8", progress: "100%", exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 5, name: "Carmen", minutes: "53.9", progress: "44.9%", exercise: "34.0", goals: "0.0", total: "34.0" },
-      { rank: 6, name: "Stef", minutes: "40.1", progress: "33.4%", exercise: "20.8", goals: "0.0", total: "20.8" }
-    ]
-  },
-    {
-    number: 2,
-    dates: { zh: "10月19–25日", en: "Oct 19–25" },
-    rows: [
-      { rank: 1, name: "Dodo",  minutes: "189.4", progress: "100%",  exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 1, name: "Vicky", minutes: "286.7", progress: "100%",  exercise: "80.0", goals: "0.0", total: "80.0" },
-      { rank: 3, name: "Clem",  minutes: "104.0", progress: "86.7%", exercise: "76.1", goals: "0.0", total: "76.1" },
-      { rank: 4, name: "Patrick", minutes: "88.5", progress: "73.7%", exercise: "66.3", goals: "0.0", total: "66.3" }
-    ]
-  },
-    {
-      number: 1,
-      dates: { zh: "10月12–18日, 2026", en: "Oct 12–18, 2026" },
-      rows: [
-        { name: "Vicky", minutes: "30.0", progress: "25.0%", exercise: "12.5", goals: "0.0", total: "12.5" }
-      ]
-    }
-  ],
-  // One block per week. goal1/goal2: null = 待定 / TBC, or a string, or {zh, en}.
-  // goal1Done/goal2Done: true shows a tick on the right.
-  personalGoals: [
-    { week: 4, dates: { zh: "11月2–8日", en: "Nov 2–8" }, people: [
-      { name: "Vicky", goal1: "run 2 times this week", goal1Done: false, goal2: "strength and conditionings 2 times this week", goal2Done: false },
-      { name: "Stef", goal1: "cycling twice", goal1Done: false, goal2: "HIIT once", goal2Done: false },
-      { name: "Dodo", goal1: "tennis", goal1Done: false, goal2: "indoor walk", goal2Done: false },
-      { name: "Irene", goal1: "basketball training 2 times", goal1Done: false, goal2: "strength and capacity training 2 times", goal2Done: false }
-    ] },
-    {
-      week: 3,
-      dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" },
-      people: [
-        { name: "Irene", goal1: "basketball training 2 times", goal1Done: true, goal2: "mobility and capacity training 2 times", goal2Done: true },
-        { name: "Stef", goal1: "cycling two times this week", goal1Done: false, goal2: "HIIT once", goal2Done: false },
-        { name: "Heena", goal1: "Average 20K steps this week", goal1Done: false, goal2: "HIIT once", goal2Done: false },
-        { name: "Carmen", goal1: "hit the gym 4 times this week", goal1Done: false, goal2: "get 10k steps every day", goal2Done: false },
-        { name: "Vicky", goal1: "run 2 times this week", goal1Done: true, goal2: "strength and conditionings 2 times this week", goal2Done: true },
-        { name: "Clem", goal1: "average 10K steps", goal1Done: false, goal2: "functional Strength or weight 2 times", goal2Done: false }
+      "number": 3,
+      "dates": {
+        "zh": "10月26日–11月1日",
+        "en": "Oct 26–Nov 1"
+      },
+      "rows": [
+        {
+          "rank": 1,
+          "name": "Irene",
+          "minutes": "480.0",
+          "progress": "100%",
+          "exercise": "80.0",
+          "goals": "20.0",
+          "total": "100.0"
+        },
+        {
+          "rank": 1,
+          "name": "Vicky",
+          "minutes": "326.5",
+          "progress": "100%",
+          "exercise": "80.0",
+          "goals": "20.0",
+          "total": "100.0"
+        },
+        {
+          "rank": 3,
+          "name": "Dodo",
+          "minutes": "121.4",
+          "progress": "100%",
+          "exercise": "80.0",
+          "goals": "0.0",
+          "total": "80.0"
+        },
+        {
+          "rank": 3,
+          "name": "Patrick",
+          "minutes": "147.8",
+          "progress": "100%",
+          "exercise": "80.0",
+          "goals": "0.0",
+          "total": "80.0"
+        },
+        {
+          "rank": 5,
+          "name": "Carmen",
+          "minutes": "53.9",
+          "progress": "44.9%",
+          "exercise": "34.0",
+          "goals": "0.0",
+          "total": "34.0"
+        },
+        {
+          "rank": 6,
+          "name": "Stef",
+          "minutes": "40.1",
+          "progress": "33.4%",
+          "exercise": "20.8",
+          "goals": "0.0",
+          "total": "20.8"
+        }
       ]
     },
     {
-      week: 1,
-      dates: { zh: "10月12–18日", en: "Oct 12–18" },
-      people: [
-        { name: "Clem",  goal1: null, goal1Done: false, goal2: null, goal2Done: false },
-        { name: "Dodo",  goal1: null, goal1Done: false, goal2: null, goal2Done: false },
-        { name: "Vicky", goal1: null, goal1Done: false, goal2: null, goal2Done: false }
+      "number": 2,
+      "dates": {
+        "zh": "10月19–25日",
+        "en": "Oct 19–25"
+      },
+      "rows": [
+        {
+          "rank": 1,
+          "name": "Dodo",
+          "minutes": "189.4",
+          "progress": "100%",
+          "exercise": "80.0",
+          "goals": "0.0",
+          "total": "80.0"
+        },
+        {
+          "rank": 1,
+          "name": "Vicky",
+          "minutes": "286.7",
+          "progress": "100%",
+          "exercise": "80.0",
+          "goals": "0.0",
+          "total": "80.0"
+        },
+        {
+          "rank": 3,
+          "name": "Clem",
+          "minutes": "104.0",
+          "progress": "86.7%",
+          "exercise": "76.1",
+          "goals": "0.0",
+          "total": "76.1"
+        },
+        {
+          "rank": 4,
+          "name": "Patrick",
+          "minutes": "88.5",
+          "progress": "73.7%",
+          "exercise": "66.3",
+          "goals": "0.0",
+          "total": "66.3"
+        }
       ]
     },
     {
-      week: 2,
-      dates: { zh: "10月19–25日", en: "Oct 19–25" },
-      people: [
-        { name: "Clem",  goal1: null, goal1Done: false, goal2: null, goal2Done: false },
-        { name: "Dodo",  goal1: null, goal1Done: false, goal2: null, goal2Done: false },
-        { name: "Vicky", goal1: null, goal1Done: false, goal2: null, goal2Done: false }
+      "number": 1,
+      "dates": {
+        "zh": "10月12–18日, 2026",
+        "en": "Oct 12–18, 2026"
+      },
+      "rows": [
+        {
+          "name": "Vicky",
+          "minutes": "30.0",
+          "progress": "25.0%",
+          "exercise": "12.5",
+          "goals": "0.0",
+          "total": "12.5"
+        }
       ]
     }
   ],
-  timeline: [
-    { week: "W1", dates: { zh: "10月12–18日", en: "Oct 12–18" }, trial: true },
-    { week: "W2", dates: { zh: "10月19–25日", en: "Oct 19–25" }, trial: true },
-    { week: "W3", dates: { zh: "10月26日–11月1日", en: "Oct 26–Nov 1" } }, { week: "W4", dates: { zh: "11月2–8日", en: "Nov 2–8" } }, { week: "W5", dates: null },
-    { week: "W6", dates: null }, { week: "W7", dates: null }, { week: "W8", dates: null },
-    { week: "W9", dates: null }, { week: "W10", dates: null }, { week: "W11", dates: null },
-    { week: "W12", dates: null }      // null = 日期待定 / Dates TBC
+  "personalGoals": [
+    {
+      "week": 4,
+      "dates": {
+        "zh": "11月2–8日",
+        "en": "Nov 2–8"
+      },
+      "people": [
+        {
+          "name": "Vicky",
+          "goal1": "run 2 times this week",
+          "goal1Done": false,
+          "goal2": "strength and conditionings 2 times this week",
+          "goal2Done": false
+        },
+        {
+          "name": "Stef",
+          "goal1": "cycling twice",
+          "goal1Done": false,
+          "goal2": "HIIT once",
+          "goal2Done": false
+        },
+        {
+          "name": "Dodo",
+          "goal1": "tennis",
+          "goal1Done": false,
+          "goal2": "indoor walk",
+          "goal2Done": false
+        },
+        {
+          "name": "Irene",
+          "goal1": "basketball training 2 times",
+          "goal1Done": false,
+          "goal2": "strength and capacity training 2 times",
+          "goal2Done": false
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "dates": {
+        "zh": "10月26日–11月1日",
+        "en": "Oct 26–Nov 1"
+      },
+      "people": [
+        {
+          "name": "Irene",
+          "goal1": "basketball training 2 times",
+          "goal1Done": true,
+          "goal2": "mobility and capacity training 2 times",
+          "goal2Done": true
+        },
+        {
+          "name": "Stef",
+          "goal1": "cycling two times this week",
+          "goal1Done": false,
+          "goal2": "HIIT once",
+          "goal2Done": false
+        },
+        {
+          "name": "Heena",
+          "goal1": "Average 20K steps this week",
+          "goal1Done": false,
+          "goal2": "HIIT once",
+          "goal2Done": false
+        },
+        {
+          "name": "Carmen",
+          "goal1": "hit the gym 4 times this week",
+          "goal1Done": false,
+          "goal2": "get 10k steps every day",
+          "goal2Done": false
+        },
+        {
+          "name": "Vicky",
+          "goal1": "run 2 times this week",
+          "goal1Done": true,
+          "goal2": "strength and conditionings 2 times this week",
+          "goal2Done": true
+        },
+        {
+          "name": "Clem",
+          "goal1": "average 10K steps",
+          "goal1Done": false,
+          "goal2": "functional Strength or weight 2 times",
+          "goal2Done": false
+        }
+      ]
+    },
+    {
+      "week": 1,
+      "dates": {
+        "zh": "10月12–18日",
+        "en": "Oct 12–18"
+      },
+      "people": [
+        {
+          "name": "Clem",
+          "goal1": null,
+          "goal1Done": false,
+          "goal2": null,
+          "goal2Done": false
+        },
+        {
+          "name": "Dodo",
+          "goal1": null,
+          "goal1Done": false,
+          "goal2": null,
+          "goal2Done": false
+        },
+        {
+          "name": "Vicky",
+          "goal1": null,
+          "goal1Done": false,
+          "goal2": null,
+          "goal2Done": false
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "dates": {
+        "zh": "10月19–25日",
+        "en": "Oct 19–25"
+      },
+      "people": [
+        {
+          "name": "Clem",
+          "goal1": null,
+          "goal1Done": false,
+          "goal2": null,
+          "goal2Done": false
+        },
+        {
+          "name": "Dodo",
+          "goal1": null,
+          "goal1Done": false,
+          "goal2": null,
+          "goal2Done": false
+        },
+        {
+          "name": "Vicky",
+          "goal1": null,
+          "goal1Done": false,
+          "goal2": null,
+          "goal2Done": false
+        }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "week": "W1",
+      "dates": {
+        "zh": "10月12–18日",
+        "en": "Oct 12–18"
+      },
+      "trial": true
+    },
+    {
+      "week": "W2",
+      "dates": {
+        "zh": "10月19–25日",
+        "en": "Oct 19–25"
+      },
+      "trial": true
+    },
+    {
+      "week": "W3",
+      "dates": {
+        "zh": "10月26日–11月1日",
+        "en": "Oct 26–Nov 1"
+      }
+    },
+    {
+      "week": "W4",
+      "dates": {
+        "zh": "11月2–8日",
+        "en": "Nov 2–8"
+      }
+    },
+    {
+      "week": "W5",
+      "dates": null
+    },
+    {
+      "week": "W6",
+      "dates": null
+    },
+    {
+      "week": "W7",
+      "dates": null
+    },
+    {
+      "week": "W8",
+      "dates": null
+    },
+    {
+      "week": "W9",
+      "dates": null
+    },
+    {
+      "week": "W10",
+      "dates": null
+    },
+    {
+      "week": "W11",
+      "dates": null
+    },
+    {
+      "week": "W12",
+      "dates": null
+    }
   ]
 };
 /* ======================== END OF DATA SECTION ======================== */

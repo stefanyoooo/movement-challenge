@@ -720,7 +720,7 @@ const T = {
   zh: {
     title: "運動挑戰排行榜",
     pill: "正式挑戰 · 已入帳",
-    note: "正式第 1 週：10月26日–11月1日 · 按星期一至日計分",
+    note: (w) => `正式第 ${displayWeek(w.number)} 週：${w.dates.zh} · 按星期一至日計分`,
     lbHead: (w) => `本週排行榜 · 第 ${displayWeek(w.number)} 週（${w.dates.zh} · ${w.status.zh}）`,
     cols: ["名次", "參加者", "本週分鐘", "進度", "運動分 /80", "目標分 /20", "總分"],
     short: ["分鐘", "進度", "運動 /80", "目標 /20"],
@@ -759,7 +759,7 @@ const T = {
   en: {
     title: "Movement Challenge Leaderboard",
     pill: "Challenge · entries recorded",
-    note: "Week 1: Oct 26–Nov 1 · scored Monday–Sunday",
+    note: (w) => `Week ${displayWeek(w.number)}: ${w.dates.en} · scored Monday–Sunday`,
     lbHead: (w) => `Leaderboard · Week ${displayWeek(w.number)} (${w.dates.en} · ${w.status.en})`,
     cols: ["Rank", "Name", "Minutes", "Progress", "Exercise /80", "Goals /20", "Total"],
     short: ["Minutes", "Progress", "Exercise /80", "Goals /20"],
@@ -807,7 +807,7 @@ function render(){
   const t = T[LANG], w = DATA.currentWeek;
   document.documentElement.lang = LANG === "zh" ? "zh-Hant" : "en";
   document.title = LANG === "zh" ? "運動挑戰排行榜 · Movement Challenge Leaderboard" : "Movement Challenge Leaderboard";
-  document.querySelectorAll("[data-i]").forEach(el => { el.textContent = t[el.dataset.i]; });
+  document.querySelectorAll("[data-i]").forEach(el => { el.textContent = el.dataset.i === "note" ? t.note(w) : t[el.dataset.i]; });
   document.getElementById("btn-zh").classList.toggle("on", LANG === "zh");
   document.getElementById("btn-en").classList.toggle("on", LANG === "en");
 
